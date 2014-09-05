@@ -1,3 +1,1 @@
 django
-django-nose
-flake8
