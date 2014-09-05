@@ -1,6 +1,9 @@
 django_trees
 ============
 
+.. image:: https://travis-ci.org/imtapps/django-trees.svg?branch=master
+    :target: https://travis-ci.org/imtapps/django-trees
+
 Simple way to create, persist and manipulate reliable tree structures using Django models.
 
 
