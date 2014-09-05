@@ -1,0 +1,70 @@
+from django.test import TestCase
+from django_trees.tests.helper import NodeTestHelper
+
+
+class MutipleTreeTests(TestCase, NodeTestHelper):
+
+    def setUp(self):
+        self.nA = self.create_node("A")
+        self.nB = self.create_node("B", self.nA)
+        self.nC = self.create_node("C", self.nB)
+        self.nV = self.create_node("V")
+        self.nW = self.create_node("W", self.nV)
+        self.nX = self.create_node("X", self.nV)
+
+    def test_deleting_from_one_tree_does_not_affect_another(self):
+        self.nB.delete()
+        self.assertEqual(list(self.nA.get_descendants()), [])
+        self.assertEqual(list(self.nX.get_ancestors()), [self.nV])
+        self.assertEqual(list(self.nV.get_descendants()), [self.nW, self.nX])
+        self.refresh_node_instances()
+        self.assertEqual((1, 2), self.nA.edges)
+        self.assertEqual((1, 6), self.nV.edges)
+        self.assertEqual((2, 3), self.nW.edges)
+        self.assertEqual((4, 5), self.nX.edges)
+        self.assertEqual(self.nA._depth, 0)
+        self.assertEqual(self.nV._depth, 0)
+        self.assertEqual(self.nW._depth, 1)
+        self.assertEqual(self.nX._depth, 1)
+        self.assertEqual(self.nA.max_tree_depth, 0)
+        self.assertEqual(self.nV.max_tree_depth, 1)
+
+    def test_two_independent_trees_can_exist_seperately(self):
+        self.assertEqual(list(self.nC.get_ancestors()), [self.nB, self.nA])
+        self.assertEqual(list(self.nA.get_descendants()), [self.nB, self.nC])
+        self.assertEqual(list(self.nX.get_ancestors()), [self.nV])
+        self.assertEqual(list(self.nV.get_descendants()), [self.nW, self.nX])
+        self.assertEqual((1, 6), self.nA.edges)
+        self.assertEqual((2, 5), self.nB.edges)
+        self.assertEqual((3, 4), self.nC.edges)
+        self.assertEqual((1, 6), self.nV.edges)
+        self.assertEqual((2, 3), self.nW.edges)
+        self.assertEqual((4, 5), self.nX.edges)
+        self.assertEqual(self.nA._depth, 0)
+        self.assertEqual(self.nB._depth, 1)
+        self.assertEqual(self.nC._depth, 2)
+        self.assertEqual(self.nV._depth, 0)
+        self.assertEqual(self.nW._depth, 1)
+        self.assertEqual(self.nX._depth, 1)
+        self.assertEqual(self.nA.max_tree_depth, 2)
+        self.assertEqual(self.nV.max_tree_depth, 1)
+
+    def test_moving_from_one_tree_to_another(self):
+        self.nB.move(self.nW)
+        self.assertEqual(list(self.nC.get_ancestors()), [self.nB, self.nW, self.nV])
+        self.assertEqual(list(self.nA.get_descendants()), [])
+        self.refresh_node_instances()
+        self.assertEqual(0, self.nA.max_tree_depth)
+        self.assertEqual(3, self.nV.max_tree_depth)
+        self.assertEqual((1, 2), self.nA.edges)
+        self.assertEqual((1, 10), self.nV.edges)
+        self.assertEqual((2, 7), self.nW.edges)
+        self.assertEqual((8, 9), self.nX.edges)
+        self.assertEqual((3, 6), self.nB.edges)
+        self.assertEqual((4, 5), self.nC.edges)
+        self.assertEqual(self.nA._depth, 0)
+        self.assertEqual(self.nV._depth, 0)
+        self.assertEqual(self.nW._depth, 1)
+        self.assertEqual(self.nX._depth, 1)
+        self.assertEqual(self.nB._depth, 2)
+        self.assertEqual(self.nC._depth, 3)

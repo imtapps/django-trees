@@ -1,0 +1,7 @@
+*.py[co]
+build/
+db.sqlite3
+dist/
+*.egg-info/
+.coverage
+
