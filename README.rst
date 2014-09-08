@@ -64,7 +64,7 @@ To retrieve all of the ancestors of a node (including parents, grandparents, gre
 
 
 Get Node Children
-----------------
+-----------------
 
 To retrieve all immediate children of the current node use the ``get_children`` method. This method will return a flat list of node objects.
 
@@ -94,7 +94,7 @@ To create a separate tree from a branch of an existing tree use the ``bifurcate`
 
 
 Get ASCII Tree
--------------
+--------------
 
 To get an ascii representation of the tree structure use the ``get_ascii_tree`` method.
 
@@ -102,4 +102,8 @@ To get an ascii representation of the tree structure use the ``get_ascii_tree`` 
 
    projects.get_ascii_tree()
 
-.. image:: https://cloud.githubusercontent.com/assets/847632/4171187/43f08e6a-353a-11e4-8cb7-6f67c49cc111.gif
+
+Demo
+----
+
+.. image:: https://cloud.githubusercontent.com/assets/847632/4188298/1d00fe0a-3771-11e4-8900-ccda9fbb72a1.gif
