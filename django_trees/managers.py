@@ -1,14 +1,11 @@
+import uuid
 from django.db.models.signals import pre_save, pre_delete
 from django_trees.exceptions import InvalidNodeMove
-from django.db.models import Max
 from django_trees import signals
 from django.db import models
 
 
 class NodeManager(models.Manager):
-
-    def get_next_tree_id(self):
-        return (self.all().aggregate(Max('_tree_id')).get('_tree_id__max', 0) or 0) + 1
 
     def _move_node(self, node, new_parent):
         original_tree_id = node._tree_id
@@ -77,7 +74,7 @@ class NodeManager(models.Manager):
             _tree_id=node._tree_id,
             _left__gte=node._left,
             _right__lte=node._right
-        ).update(_tree_id=self.get_next_tree_id())
+        ).update(_tree_id=uuid.uuid4())
 
     def _update_edges(self, delta, left, right):
         left.update(_left=models.F("_left") + delta)
@@ -86,7 +83,7 @@ class NodeManager(models.Manager):
     def contribute_to_class(self, model, name):
         super(NodeManager, self).contribute_to_class(model, name)
         if not model._meta.abstract:
-            tree_id_field = models.IntegerField(default=self.get_next_tree_id)
+            tree_id_field = models.CharField(max_length=36, default=uuid.uuid4)
             tree_id_field.contribute_to_class(model, "_tree_id")
 
         pre_save.connect(signals.pre_save_node, model)
