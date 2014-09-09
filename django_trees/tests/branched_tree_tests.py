@@ -502,3 +502,4 @@ class ComplexTests(TestCase, NodeTestHelper):
         self.assertTrue(3 == self.nH._depth == self.nI._depth)
         self.assertTrue(4 == self.nJ._depth == self.nK._depth == self.nL._depth)
         self.assertTrue(5 == self.nM._depth == self.nN._depth == self.nO._depth)
+        self.assertEqual(None, self.nB.parent)

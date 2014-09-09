@@ -20,10 +20,11 @@ class NodeManager(models.Manager):
             self._renumber_source_tree_for_subtree_insertion(new_parent, node)
             self._attach_subtree(new_parent, node)
 
-    def _bifurcate(self, node_to_sever):
-        self._move_node(node_to_sever, None)
-        node = self.get(pk=node_to_sever.pk)
-        self.filter(_tree_id=node._tree_id).update(_depth=models.F('_depth') - node_to_sever._depth)
+    def _bifurcate(self, node_to_bifurcate):
+        self._move_node(node_to_bifurcate, None)
+        self.filter(pk=node_to_bifurcate.pk).update(_parent=None)
+        node = self.get(pk=node_to_bifurcate.pk)
+        self.filter(_tree_id=node._tree_id).update(_depth=models.F('_depth') - node_to_bifurcate._depth)
 
     def _renumber_source_tree_for_node_insertion(self, node):
         self.filter(_left__gt=node._left, _tree_id=node._tree_id).update(_left=models.F('_left') + 2)
