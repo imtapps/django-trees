@@ -86,7 +86,7 @@ To move a node to a different position in the tree use the ``move`` method passi
 Bifurcate Node
 --------------
 
-To create a separate tree from a branch of an existing tree use the ``bifurcate`` method. The node object will be removed from the previous tree and it along with it's descendants will now be in a new tree.
+To create a separate tree from a branch of an existing tree use the ``bifurcate`` method. The node object will be removed from the previous tree and it along with its descendants will now be in a new tree.
 
 .. code:: python
 
