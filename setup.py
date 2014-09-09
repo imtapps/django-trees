@@ -3,7 +3,7 @@ from setuptools import setup, find_packages
 
 setup(
     name="django_trees",
-    version="2.0.0",
+    version="2.0.1",
     author='imtapps',
     author_email='serveradmin@imtapps.com',
     description='Simple way to create, persist and manipulate reliable tree structures using Django models.',
